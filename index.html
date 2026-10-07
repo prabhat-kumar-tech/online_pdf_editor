@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="color-scheme" content="light dark">
+    <meta name="description" content="Edit, merge and create PDFs directly in your browser. Files never leave your device.">
+    <title>Online PDF Editor</title>
+    <link rel="icon" type="image/svg+xml" href="assets/icons/logo.svg">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- ============ SVG icon sprite (referenced with <use href="#i-name">) ============ -->
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+        <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></symbol>
+        <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></symbol>
+        <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></symbol>
+        <symbol id="i-file-plus" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M12 11v6M9 14h6"/></symbol>
+        <symbol id="i-file-up" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M12 18v-6M9 15l3-3 3 3"/></symbol>
+        <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+        <symbol id="i-merge" viewBox="0 0 24 24"><path d="M5 4v3a5 5 0 0 0 5 5h4a5 5 0 0 1 5 5v3M19 4v3a5 5 0 0 1-5 5"/><path d="M16 17l3 3 3-3" transform="translate(-3 0)"/></symbol>
+        <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></symbol>
+        <symbol id="i-type" viewBox="0 0 24 24"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></symbol>
+        <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></symbol>
+        <symbol id="i-split" viewBox="0 0 24 24"><path d="M12 3v18M8 7l-4 5 4 5M16 7l4 5-4 5"/></symbol>
+        <symbol id="i-rotate-cw" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7L21 8M21 3v5h-5"/></symbol>
+        <symbol id="i-rotate-ccw" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></symbol>
+        <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/></symbol>
+        <symbol id="i-compress" viewBox="0 0 24 24"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></symbol>
+        <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+        <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 15V3M7 8l5-5 5 5M4 21h16"/></symbol>
+        <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></symbol>
+        <symbol id="i-save" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></symbol>
+        <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+        <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+        <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></symbol>
+        <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></symbol>
+        <symbol id="i-zoom-in" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M11 8v6M8 11h6"/></symbol>
+        <symbol id="i-zoom-out" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M8 11h6"/></symbol>
+        <symbol id="i-fit-width" viewBox="0 0 24 24"><path d="M3 12h18M7 8l-4 4 4 4M17 8l4 4-4 4"/></symbol>
+        <symbol id="i-fit-page" viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="18" rx="1"/></symbol>
+        <symbol id="i-fullscreen" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></symbol>
+        <symbol id="i-chev-left" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></symbol>
+        <symbol id="i-chev-right" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></symbol>
+        <symbol id="i-chev-up" viewBox="0 0 24 24"><path d="M18 15l-6-6-6 6"/></symbol>
+        <symbol id="i-chev-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+        <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 14L4 9l5-5M4 9h10a6 6 0 0 1 0 12h-3"/></symbol>
+        <symbol id="i-redo" viewBox="0 0 24 24"><path d="M15 14l5-5-5-5M20 9H10a6 6 0 0 0 0 12h3"/></symbol>
+        <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+        <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></symbol>
+        <symbol id="i-bold" viewBox="0 0 24 24"><path d="M7 4h6a4 4 0 0 1 0 8H7zM7 12h7a4 4 0 0 1 0 8H7z"/></symbol>
+        <symbol id="i-italic" viewBox="0 0 24 24"><path d="M19 4h-9M14 20H5M15 4L9 20"/></symbol>
+        <symbol id="i-underline" viewBox="0 0 24 24"><path d="M6 4v6a6 6 0 0 0 12 0V4M4 21h16"/></symbol>
+        <symbol id="i-align-left" viewBox="0 0 24 24"><path d="M3 6h18M3 12h12M3 18h16"/></symbol>
+        <symbol id="i-align-center" viewBox="0 0 24 24"><path d="M3 6h18M6 12h12M4 18h16"/></symbol>
+        <symbol id="i-align-right" viewBox="0 0 24 24"><path d="M3 6h18M9 12h12M5 18h16"/></symbol>
+        <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></symbol>
+        <symbol id="i-cursor" viewBox="0 0 24 24"><path d="M5 3l14 7-6 2-2 6z"/></symbol>
+        <symbol id="i-sidebar" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></symbol>
+        <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></symbol>
+        <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01"/></symbol>
+        <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></symbol>
+        <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></symbol>
+        <symbol id="i-grip" viewBox="0 0 24 24"><path d="M9 5h.01M9 12h.01M9 19h.01M15 5h.01M15 12h.01M15 19h.01" stroke-width="3"/></symbol>
+        <symbol id="i-select-all" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="3 3"/><path d="M8 12l3 3 5-6"/></symbol>
+        <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></symbol>
+        <symbol id="i-droplet" viewBox="0 0 24 24"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></symbol>
+        <symbol id="i-hash" viewBox="0 0 24 24"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></symbol>
+        <symbol id="i-file-text" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></symbol>
+        <symbol id="i-pen" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></symbol>
+        <symbol id="i-highlight" viewBox="0 0 24 24"><path d="M9 11l-6 6v3h9l3-3M22 12l-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/></symbol>
+    </defs>
+</svg>
+
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<div id="app" class="app" data-sidebar="expanded">
+    <!-- ======================= TOP BAR ======================= -->
+    <header class="topbar">
+        <button type="button" class="icon-btn" data-action="toggle-sidebar" data-tip="Toggle sidebar" aria-label="Toggle sidebar" aria-controls="sidebar">
+            <svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg>
+        </button>
+        <a class="brand" href="#" data-action="go-home" aria-label="Go to home">
+            <span class="brand-logo" aria-hidden="true"><svg class="icon"><use href="#i-file"/></svg></span>
+            <span class="brand-name" data-app-name>Online PDF Editor</span>
+        </a>
+
+        <nav class="menubar" aria-label="Main menu">
+            <div class="menu">
+                <button type="button" class="menu-btn" aria-haspopup="true" aria-expanded="false">File</button>
+                <div class="menu-list" role="menu" hidden>
+                    <button type="button" role="menuitem" data-action="open-pdf">Open PDF<kbd>Ctrl+O</kbd></button>
+                    <button type="button" role="menuitem" data-action="open-images">Open Images</button>
+                    <button type="button" role="menuitem" data-action="new-doc">New Document</button>
+                    <hr>
+                    <button type="button" role="menuitem" data-action="save" data-requires="doc">Save<kbd>Ctrl+S</kbd></button>
+                    <button type="button" role="menuitem" data-action="save-as" data-requires="doc">Save As…</button>
+                    <hr>
+                    <button type="button" role="menuitem" data-action="close-doc" data-requires="doc">Close</button>
+                </div>
+            </div>
+            <div class="menu">
+                <button type="button" class="menu-btn" aria-haspopup="true" aria-expanded="false">Edit</button>
+                <div class="menu-list" role="menu" hidden>
+                    <button type="button" role="menuitem" data-action="undo" data-requires="undo">Undo<kbd>Ctrl+Z</kbd></button>
+                    <button type="button" role="menuitem" data-action="redo" data-requires="redo">Redo<kbd>Ctrl+Y</kbd></button>
+                    <hr>
+                    <button type="button" role="menuitem" data-action="add-text" data-requires="doc">Add Text</button>
+                    <button type="button" role="menuitem" data-action="delete" data-requires="doc">Delete<kbd>Del</kbd></button>
+                    <button type="button" role="menuitem" data-action="select-all" data-requires="doc">Select All</button>
+                </div>
+            </div>
+            <div class="menu">
+                <button type="button" class="menu-btn" aria-haspopup="true" aria-expanded="false">View</button>
+                <div class="menu-list" role="menu" hidden>
+                    <button type="button" role="menuitem" data-action="zoom-in" data-requires="doc">Zoom In<kbd>Ctrl++</kbd></button>
+                    <button type="button" role="menuitem" data-action="zoom-out" data-requires="doc">Zoom Out<kbd>Ctrl+-</kbd></button>
+                    <button type="button" role="menuitem" data-action="zoom-reset" data-requires="doc">Reset Zoom<kbd>Ctrl+0</kbd></button>
+                    <button type="button" role="menuitem" data-action="fit-page" data-requires="doc">Fit Page</button>
+                    <button type="button" role="menuitem" data-action="fit-width" data-requires="doc">Fit Width</button>
+                    <hr>
+                    <button type="button" role="menuitem" data-action="fullscreen" data-requires="doc">Fullscreen</button>
+                    <button type="button" role="menuitem" data-action="toggle-sidebar">Toggle Sidebar</button>
+                </div>
+            </div>
+            <div class="menu">
+                <button type="button" class="menu-btn" aria-haspopup="true" aria-expanded="false">Help</button>
+                <div class="menu-list" role="menu" hidden>
+                    <button type="button" role="menuitem" data-action="start-tour">Take a Tour</button>
+                    <button type="button" role="menuitem" data-action="show-shortcuts">Keyboard Shortcuts</button>
+                    <button type="button" role="menuitem" data-action="show-privacy">Privacy</button>
+                    <button type="button" role="menuitem" data-action="show-about">About</button>
+                    <button type="button" role="menuitem" data-action="show-version">Version</button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="doc-title" id="doc-title" hidden>
+            <svg class="icon" aria-hidden="true"><use href="#i-file"/></svg>
+            <span id="doc-name"></span><span id="dirty-dot" class="dirty-dot" hidden aria-label="Unsaved changes" title="Unsaved changes">*</span>
+        </div>
+
+        <div class="topbar-right">
+            <button type="button" id="btn-privacy" class="chip" data-action="show-privacy" data-tip="Your files stay on your device">
+                <svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg><span>Local Processing</span>
+            </button>
+            <a id="btn-contact" class="btn btn-sm btn-primary" href="mailto:prabhatkumar9304@gmail.com" data-tip="prabhatkumar9304@gmail.com" aria-label="Contact me by email: prabhatkumar9304@gmail.com">
+                <svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg><span>ContactMe</span>
+            </a>
+            <button type="button" id="btn-theme" class="icon-btn" data-action="cycle-theme" data-tip="Change theme" aria-label="Change theme">
+                <svg class="icon" aria-hidden="true"><use href="#i-sun"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <div class="shell">
+        <!-- ======================= SIDEBAR ======================= -->
+        <aside id="sidebar" class="sidebar" aria-label="Tools">
+            <nav>
+                <ul class="tool-list">
+                    <li><button type="button" class="tool-btn" data-action="open-tool" data-tool="home"><svg class="icon" aria-hidden="true"><use href="#i-home"/></svg><span>Home</span></button></li>
+                    <li><button type="button" class="tool-btn" data-action="open-tool" data-tool="viewer"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg><span>Viewer</span></button></li>
+                    <li><button type="button" class="tool-btn" data-action="open-tool" data-tool="merge"><svg class="icon" aria-hidden="true"><use href="#i-merge"/></svg><span>Merge PDF</span></button></li>
+                    <li><button type="button" class="tool-btn" data-action="open-tool" data-tool="organize"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg><span>Organize</span></button></li>
+                    <li><button type="button" class="tool-btn" data-action="open-tool" data-tool="extract"><svg class="icon" aria-hidden="true"><use href="#i-file-up"/></svg><span>Extract</span></button></li>
+                    <li><button type="button" class="tool-btn" data-action="open-tool" data-tool="editor"><svg class="icon" aria-hidden="true"><use href="#i-type"/></svg><span>Edit PDF</span></button></li>
+                    <li><button type="button" class="tool-btn" data-action="open-tool" data-tool="totext"><svg class="icon" aria-hidden="true"><use href="#i-file-text"/></svg><span>Extract Text</span></button></li>
+                    <li><button type="button" class="tool-btn" data-action="open-tool" data-tool="images"><svg class="icon" aria-hidden="true"><use href="#i-image"/></svg><span>Image to PDF</span></button></li>
+                    <li><button type="button" class="tool-btn" data-action="open-tool" data-tool="toimg"><svg class="icon" aria-hidden="true"><use href="#i-image"/></svg><span>PDF to Images</span></button></li>
+                    <li><button type="button" class="tool-btn" data-action="open-tool" data-tool="split"><svg class="icon" aria-hidden="true"><use href="#i-split"/></svg><span>Split</span></button></li>
+                    <li><button type="button" class="tool-btn" data-action="open-tool" data-tool="rotate"><svg class="icon" aria-hidden="true"><use href="#i-rotate-cw"/></svg><span>Rotate</span></button></li>
+                    <li><button type="button" class="tool-btn" data-action="open-tool" data-tool="delete"><svg class="icon" aria-hidden="true"><use href="#i-trash"/></svg><span>Delete</span></button></li>
+                    <li><button type="button" class="tool-btn" data-action="open-tool" data-tool="compress"><svg class="icon" aria-hidden="true"><use href="#i-compress"/></svg><span>Compress</span></button></li>
+                    <li><button type="button" class="tool-btn" data-action="open-tool" data-tool="protect"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg><span>Protect PDF</span></button></li>
+                    <li><button type="button" class="tool-btn" data-action="open-tool" data-tool="watermark"><svg class="icon" aria-hidden="true"><use href="#i-droplet"/></svg><span>Watermark</span></button></li>
+                    <li><button type="button" class="tool-btn" data-action="open-tool" data-tool="numbers"><svg class="icon" aria-hidden="true"><use href="#i-hash"/></svg><span>Page Numbers</span></button></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- ======================= MAIN ======================= -->
+        <main id="main" class="main" tabindex="-1">
+
+            <!-- ---------- HOME ---------- -->
+            <section class="view" data-view="home" aria-labelledby="home-title">
+                <div class="home">
+                    <div class="home-hero">
+                        <h1 id="home-title" data-app-name>Online PDF Editor</h1>
+                        <p class="lead" data-tagline>Your browser-based PDF workspace</p>
+                        <p class="muted">Your files stay on your device. PDF processing happens locally in your browser.</p>
+                    </div>
+                    <div class="dropzone dropzone-compact" id="dz-home" tabindex="0" role="button" aria-label="Open a PDF or images. Drop files here or press Enter to choose.">
+                        <svg class="icon icon-xl" aria-hidden="true"><use href="#i-upload"/></svg>
+                        <div class="dz-text"><strong>Drop a PDF or images here</strong><span class="muted">PDFs open in the viewer · images become a new PDF</span></div>
+                        <span class="btn btn-primary">Choose Files</span>
+                    </div>
+                    <div class="tool-grid">
+                        <button type="button" class="tool-card" data-action="open-tool" data-tool="merge"><span class="tc-icon"><svg class="icon" aria-hidden="true"><use href="#i-merge"/></svg></span><strong>Merge PDF</strong><span>Combine several PDFs into one.</span></button>
+                        <button type="button" class="tool-card" data-action="open-tool" data-tool="images"><span class="tc-icon"><svg class="icon" aria-hidden="true"><use href="#i-image"/></svg></span><strong>Image to PDF</strong><span>Turn JPG, PNG and WEBP into a PDF.</span></button>
+                        <button type="button" class="tool-card" data-action="open-tool" data-tool="editor"><span class="tc-icon"><svg class="icon" aria-hidden="true"><use href="#i-type"/></svg></span><strong>Edit PDF</strong><span>Add text and replace visible text.</span></button>
+                        <button type="button" class="tool-card" data-action="open-tool" data-tool="organize"><span class="tc-icon"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg></span><strong>Organize Pages</strong><span>Reorder, duplicate and insert pages.</span></button>
+                        <button type="button" class="tool-card" data-action="open-tool" data-tool="split"><span class="tc-icon"><svg class="icon" aria-hidden="true"><use href="#i-split"/></svg></span><strong>Split PDF</strong><span>Cut a PDF into several files.</span></button>
+                        <button type="button" class="tool-card" data-action="open-tool" data-tool="rotate"><span class="tc-icon"><svg class="icon" aria-hidden="true"><use href="#i-rotate-cw"/></svg></span><strong>Rotate Pages</strong><span>Rotate single pages or the whole file.</span></button>
+                        <button type="button" class="tool-card" data-action="open-tool" data-tool="delete"><span class="tc-icon"><svg class="icon" aria-hidden="true"><use href="#i-trash"/></svg></span><strong>Delete Pages</strong><span>Remove pages you don't need.</span></button>
+                        <button type="button" class="tool-card" data-action="open-tool" data-tool="extract"><span class="tc-icon"><svg class="icon" aria-hidden="true"><use href="#i-file-up"/></svg></span><strong>Extract Pages</strong><span>Save selected pages as a new PDF.</span></button>
+                        <button type="button" class="tool-card" data-action="open-tool" data-tool="viewer"><span class="tc-icon"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg></span><strong>PDF Viewer</strong><span>Read with thumbnails, zoom and search-friendly text.</span></button>
+                        <button type="button" class="tool-card" data-action="open-tool" data-tool="compress"><span class="tc-icon"><svg class="icon" aria-hidden="true"><use href="#i-compress"/></svg></span><strong>Compress PDF</strong><span>Reduce file size.</span></button>
+                        <button type="button" class="tool-card" data-action="open-tool" data-tool="protect"><span class="tc-icon"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg></span><strong>Protect PDF</strong><span>Add a password (AES-256) and set permissions.</span></button>
+                        <button type="button" class="tool-card" data-action="open-tool" data-tool="watermark"><span class="tc-icon"><svg class="icon" aria-hidden="true"><use href="#i-droplet"/></svg></span><strong>Watermark</strong><span>Stamp text such as CONFIDENTIAL on pages.</span></button>
+                        <button type="button" class="tool-card" data-action="open-tool" data-tool="numbers"><span class="tc-icon"><svg class="icon" aria-hidden="true"><use href="#i-hash"/></svg></span><strong>Page Numbers</strong><span>Add numbering in any corner.</span></button>
+                        <button type="button" class="tool-card" data-action="open-tool" data-tool="toimg"><span class="tc-icon"><svg class="icon" aria-hidden="true"><use href="#i-image"/></svg></span><strong>PDF to Images</strong><span>Save pages as PNG or JPG.</span></button>
+                        <button type="button" class="tool-card" data-action="open-tool" data-tool="totext"><span class="tc-icon"><svg class="icon" aria-hidden="true"><use href="#i-file-text"/></svg></span><strong>Extract Text</strong><span>Copy or download the text of a PDF.</span></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ---------- MERGE ---------- -->
+            <section class="view" data-view="merge" aria-labelledby="merge-title" hidden>
+                <div class="tool-page">
+                    <header class="tool-head"><h1 id="merge-title">Merge PDF</h1><p class="muted">Combine PDFs in the order shown. Drag cards or use the arrows to reorder.</p></header>
+                    <div class="dropzone" id="dz-merge" tabindex="0" role="button" aria-label="Add PDF files. Drop files here or press Enter to choose.">
+                        <svg class="icon icon-xl" aria-hidden="true"><use href="#i-upload"/></svg>
+                        <strong>Drop PDF files here</strong><span class="muted">or</span>
+                        <span class="btn btn-primary">Choose Files</span>
+                    </div>
+                    <div id="merge-panel" hidden>
+                        <ul id="merge-list" class="card-list" aria-label="PDFs to merge"></ul>
+                        <div class="panel options-row">
+                            <div class="field"><label class="field-label" for="merge-filename">Output filename</label><input id="merge-filename" class="input" type="text" value="merged.pdf" autocomplete="off"></div>
+                            <p id="merge-summary" class="muted grow" aria-live="polite"></p>
+                            <button type="button" class="btn" data-action="merge-add"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg>Add more</button>
+                            <button type="button" class="btn" data-action="merge-clear">Clear all</button>
+                            <button type="button" class="btn btn-primary" id="btn-merge-run" data-action="merge-run">Merge PDFs</button>
+                        </div>
+                    </div>
+                    <div id="merge-result" class="result-card" hidden>
+                        <svg class="icon icon-xl success" aria-hidden="true"><use href="#i-check"/></svg>
+                        <h2>Merge completed successfully.</h2>
+                        <p class="muted" id="merge-result-info"></p>
+                        <div class="btn-row">
+                            <button type="button" class="btn btn-primary" data-action="merge-open">Open PDF</button>
+                            <button type="button" class="btn" data-action="merge-download"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>Download</button>
+                            <button type="button" class="btn btn-ghost" data-action="merge-reset">Merge more</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ---------- IMAGE TO PDF ---------- -->
+            <section class="view" data-view="images" aria-labelledby="images-title" hidden>
+                <div class="tool-page">
+                    <header class="tool-head"><h1 id="images-title">Image to PDF</h1><p class="muted">JPG, PNG and WEBP. Drag thumbnails to reorder; every image becomes one page.</p></header>
+                    <div class="dropzone" id="dz-images" tabindex="0" role="button" aria-label="Add images. Drop files here or press Enter to choose.">
+                        <svg class="icon icon-xl" aria-hidden="true"><use href="#i-upload"/></svg>
+                        <strong>Drop images here</strong><span class="muted">or</span>
+                        <span class="btn btn-primary">Choose Files</span>
+                    </div>
+                    <div id="img-panel" hidden>
+                        <ul id="img-grid" class="img-grid" aria-label="Images, in page order"></ul>
+                        <form id="img-form" class="panel options-grid">
+                            <div class="field"><label class="field-label" for="opt-pagesize">Page size</label>
+                                <select id="opt-pagesize" class="input"><option>A4</option><option>A3</option><option>Letter</option><option>Legal</option><option value="Original">Original Image Size</option><option value="Custom">Custom</option></select></div>
+                            <div class="field" id="field-custom-size" hidden><span class="field-label">Custom size (mm)</span>
+                                <div class="inline"><input id="opt-custom-w" class="input" type="number" min="20" max="2000" value="210" aria-label="Custom width in millimetres"><span>×</span><input id="opt-custom-h" class="input" type="number" min="20" max="2000" value="297" aria-label="Custom height in millimetres"></div></div>
+                            <div class="field"><label class="field-label" for="opt-orientation">Orientation</label>
+                                <select id="opt-orientation" class="input"><option value="auto">Auto</option><option value="portrait">Portrait</option><option value="landscape">Landscape</option></select></div>
+                            <div class="field"><label class="field-label" for="opt-fit">Image fit</label>
+                                <select id="opt-fit" class="input"><option value="fit">Fit (whole image)</option><option value="fill">Fill (crop to cover)</option><option value="original">Original size</option></select></div>
+                            <div class="field"><label class="field-label" for="opt-margin">Margin</label>
+                                <select id="opt-margin" class="input"><option value="none">None</option><option value="small">Small</option><option value="medium" selected>Medium</option><option value="large">Large</option><option value="custom">Custom</option></select></div>
+                            <div class="field" id="field-custom-margin" hidden><label class="field-label" for="opt-margin-custom">Custom margin (mm)</label><input id="opt-margin-custom" class="input" type="number" min="0" max="100" value="10"></div>
+                            <div class="field"><label class="field-label" for="opt-quality">Image quality</label>
+                                <select id="opt-quality" class="input"><option value="low">Low (smallest file)</option><option value="medium">Medium</option><option value="high" selected>High (original)</option></select></div>
+                            <div class="field"><label class="field-label" for="opt-bg">Background</label>
+                                <select id="opt-bg" class="input"><option value="white">White</option><option value="transparent">Transparent where supported</option></select></div>
+                        </form>
+                        <div class="panel options-row">
+                            <p id="img-summary" class="muted grow" aria-live="polite"></p>
+                            <button type="button" class="btn" data-action="img-add"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg>Add more images</button>
+                            <button type="button" class="btn" data-action="img-clear">Clear all</button>
+                            <button type="button" class="btn btn-primary" id="btn-img-run" data-action="img-run">Create PDF</button>
+                        </div>
+                    </div>
+                    <div id="img-result" class="result-card" hidden>
+                        <svg class="icon icon-xl success" aria-hidden="true"><use href="#i-check"/></svg>
+                        <h2>PDF created successfully</h2>
+                        <p class="muted" id="img-result-info"></p>
+                        <div class="btn-row">
+                            <button type="button" class="btn" data-action="img-preview">Preview</button>
+                            <button type="button" class="btn btn-primary" data-action="img-download"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>Download PDF</button>
+                            <button type="button" class="btn btn-ghost" data-action="img-reset">Create Another</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ---------- COMPRESS ---------- -->
+            <section class="view" data-view="compress" aria-labelledby="compress-title" hidden>
+                <div class="tool-page">
+                    <header class="tool-head"><h1 id="compress-title">Compress PDF</h1><p class="muted">Reduce the file size of a PDF. Everything runs in your browser.</p></header>
+                    <div class="dropzone" id="dz-compress" tabindex="0" role="button" aria-label="Choose a PDF to compress. Drop a file here or press Enter.">
+                        <svg class="icon icon-xl" aria-hidden="true"><use href="#i-upload"/></svg>
+                        <strong>Drop a PDF here</strong><span class="muted">or</span>
+                        <span class="btn btn-primary">Choose File</span>
+                    </div>
+                    <div id="compress-panel" hidden>
+                        <div class="panel stack">
+                            <p><strong id="compress-name"></strong> <span class="muted" id="compress-size"></span></p>
+                            <fieldset class="radio-group"><legend class="field-label">Method</legend>
+                                <label class="radio"><input type="radio" name="cmode" value="lossless" checked><span><strong>Optimize structure (lossless)</strong><br><span class="muted">Visuals, text and images are untouched; the level below sets how thorough the optimisation is. Savings are usually modest.</span></span></label>
+                                <label class="radio"><input type="radio" name="cmode" value="raster"><span><strong>Reduce image quality (rasterize pages)</strong><br><span class="muted">Re-draws every page as a JPEG. Much smaller, but text is no longer selectable or searchable.</span></span></label>
+                            </fieldset>
+                            <div class="field" id="field-compress-quality">
+                                <label class="field-label" for="compress-level">Compression level (0–200 %)</label>
+                                <div class="inline">
+                                    <input id="compress-level-range" type="range" min="0" max="200" step="1" value="100" aria-label="Compression level slider" style="flex:1;accent-color:var(--primary)">
+                                    <input id="compress-level" class="input input-sm input-num" type="number" min="0" max="200" step="1" value="100"><span>%</span>
+                                </div>
+                                <p class="muted" id="compress-level-hint"></p>
+                            </div>
+                            <div class="btn-row"><button type="button" class="btn btn-primary" data-action="compress-run">Compress</button><button type="button" class="btn" data-action="compress-clear">Choose another file</button></div>
+                        </div>
+                    </div>
+                    <div id="compress-result" class="result-card" hidden>
+                        <svg class="icon icon-xl success" aria-hidden="true"><use href="#i-check"/></svg>
+                        <h2>Compression finished</h2>
+                        <p class="muted" id="compress-result-info"></p>
+                        <div class="btn-row">
+                            <button type="button" class="btn" data-action="compress-open">Open PDF</button>
+                            <button type="button" class="btn btn-primary" data-action="compress-download"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>Download</button>
+                            <button type="button" class="btn btn-ghost" data-action="compress-reset">Compress another</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ---------- DOCUMENT WORKSPACE (viewer, editor, organize, split, rotate, delete, extract) ---------- -->
+            <section class="view view-doc" data-view="doc" aria-label="PDF workspace" hidden>
+                <div id="doc-empty" class="empty-state">
+                    <div class="empty-icon" aria-hidden="true"><svg class="icon icon-xxl"><use href="#i-file"/></svg></div>
+                    <h1 data-app-name>Online PDF Editor</h1>
+                    <p class="lead" id="doc-empty-lead">Edit, merge and create PDFs directly in your browser.</p>
+                    <button type="button" class="btn btn-primary btn-lg" data-action="open-pdf">Open PDF</button>
+                    <p class="muted">or</p>
+                    <div class="dropzone dropzone-compact" id="dz-doc" tabindex="0" role="button" aria-label="Drop a PDF here or press Enter to choose a file.">
+                        <svg class="icon icon-xl" aria-hidden="true"><use href="#i-upload"/></svg><strong>Drop a PDF here</strong>
+                    </div>
+                    <h2 class="quick-title">Quick Tools</h2>
+                    <div class="btn-row">
+                        <button type="button" class="btn" data-action="open-tool" data-tool="images">Image → PDF</button>
+                        <button type="button" class="btn" data-action="open-tool" data-tool="merge">Merge PDF</button>
+                        <button type="button" class="btn" data-action="new-doc">New blank PDF</button>
+                    </div>
+                </div>
+
+                <div id="doc-workspace" class="workspace" hidden>
+                    <div class="toolbar" id="doc-toolbar" role="toolbar" aria-label="Document tools">
+                        <!-- viewer -->
+                        <div class="tb-group" data-tools="viewer">
+                            <button type="button" class="icon-btn" data-action="toggle-thumbs" data-tip="Toggle thumbnails" aria-label="Toggle thumbnails"><svg class="icon" aria-hidden="true"><use href="#i-sidebar"/></svg></button>
+                            <button type="button" class="icon-btn" data-action="rotate-page-ccw" data-tip="Rotate current page counter-clockwise" aria-label="Rotate current page counter-clockwise"><svg class="icon" aria-hidden="true"><use href="#i-rotate-ccw"/></svg></button>
+                            <button type="button" class="icon-btn" data-action="rotate-page-cw" data-tip="Rotate current page clockwise" aria-label="Rotate current page clockwise"><svg class="icon" aria-hidden="true"><use href="#i-rotate-cw"/></svg></button>
+                            <button type="button" class="icon-btn" data-action="fullscreen" data-tip="Fullscreen" aria-label="Fullscreen"><svg class="icon" aria-hidden="true"><use href="#i-fullscreen"/></svg></button>
+                            <span class="tb-hint">Select text to copy it.</span>
+                        </div>
+                        <!-- editor -->
+                        <div class="tb-group" data-tools="editor" hidden>
+                            <button type="button" class="icon-btn" data-action="toggle-thumbs" data-tip="Toggle thumbnails" aria-label="Toggle thumbnails"><svg class="icon" aria-hidden="true"><use href="#i-sidebar"/></svg></button>
+                            <button type="button" class="btn btn-sm" id="btn-tool-select" data-action="select-tool" aria-pressed="true" data-tip="Select and move objects; click existing text to edit it"><svg class="icon" aria-hidden="true"><use href="#i-cursor"/></svg>Select</button>
+                            <button type="button" class="btn btn-sm" id="btn-tool-addtext" data-action="add-text" aria-pressed="false" data-tip="Add Text, then click on the page"><svg class="icon" aria-hidden="true"><use href="#i-type"/></svg>Add Text</button>
+                            <button type="button" class="btn btn-sm" data-action="add-signature" data-tip="Draw a signature or add an image"><svg class="icon" aria-hidden="true"><use href="#i-pen"/></svg>Sign / Image</button>
+                            <button type="button" class="btn btn-sm" data-action="add-highlight" data-tip="Add a highlight box"><svg class="icon" aria-hidden="true"><use href="#i-highlight"/></svg>Highlight</button>
+                            <button type="button" class="icon-btn" data-action="delete" data-tip="Delete selected (Del)" aria-label="Delete selected object"><svg class="icon" aria-hidden="true"><use href="#i-trash"/></svg></button>
+                        </div>
+                        <!-- undo/redo -->
+                        <div class="tb-group" data-tools="editor organize rotate delete" hidden>
+                            <button type="button" class="icon-btn" data-action="undo" data-requires="undo" data-tip="Undo (Ctrl+Z)" aria-label="Undo"><svg class="icon" aria-hidden="true"><use href="#i-undo"/></svg></button>
+                            <button type="button" class="icon-btn" data-action="redo" data-requires="redo" data-tip="Redo (Ctrl+Y)" aria-label="Redo"><svg class="icon" aria-hidden="true"><use href="#i-redo"/></svg></button>
+                        </div>
+                        <!-- organizer family -->
+                        <div class="tb-group" data-tools="organize rotate delete extract" hidden>
+                            <button type="button" class="btn btn-sm" data-action="org-select-all"><svg class="icon" aria-hidden="true"><use href="#i-select-all"/></svg>Select all</button>
+                            <button type="button" class="btn btn-sm" data-action="org-clear">Clear</button>
+                        </div>
+                        <div class="tb-group" data-tools="organize rotate" hidden>
+                            <button type="button" class="icon-btn" data-action="org-rotate-left" data-requires="pagesel" data-tip="Rotate selected pages counter-clockwise" aria-label="Rotate selected pages counter-clockwise"><svg class="icon" aria-hidden="true"><use href="#i-rotate-ccw"/></svg></button>
+                            <button type="button" class="icon-btn" data-action="org-rotate-right" data-requires="pagesel" data-tip="Rotate selected pages clockwise" aria-label="Rotate selected pages clockwise"><svg class="icon" aria-hidden="true"><use href="#i-rotate-cw"/></svg></button>
+                        </div>
+                        <div class="tb-group" data-tools="rotate" hidden>
+                            <button type="button" class="btn btn-sm" data-action="org-rotate-all-left">All ↺</button>
+                            <button type="button" class="btn btn-sm" data-action="org-rotate-all-right">All ↻</button>
+                        </div>
+                        <div class="tb-group" data-tools="organize" hidden>
+                            <button type="button" class="icon-btn" data-action="org-duplicate" data-requires="pagesel" data-tip="Duplicate selected pages" aria-label="Duplicate selected pages"><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg></button>
+                            <button type="button" class="icon-btn" data-action="org-extract" data-requires="pagesel" data-tip="Extract selected pages to a new PDF" aria-label="Extract selected pages"><svg class="icon" aria-hidden="true"><use href="#i-file-up"/></svg></button>
+                            <button type="button" class="icon-btn" data-action="org-insert-blank" data-tip="Insert blank page after selection" aria-label="Insert blank page"><svg class="icon" aria-hidden="true"><use href="#i-file-plus"/></svg></button>
+                            <button type="button" class="icon-btn" data-action="org-insert-pdf" data-tip="Insert pages from another PDF" aria-label="Insert pages from another PDF"><svg class="icon" aria-hidden="true"><use href="#i-folder"/></svg></button>
+                        </div>
+                        <div class="tb-group" data-tools="organize delete" hidden>
+                            <button type="button" class="btn btn-sm btn-danger-ghost" data-action="org-delete" data-requires="pagesel"><svg class="icon" aria-hidden="true"><use href="#i-trash"/></svg>Delete selected</button>
+                        </div>
+                        <div class="tb-group" data-tools="delete" hidden>
+                            <label class="sr-only" for="org-range-delete">Pages to delete</label>
+                            <input id="org-range-delete" class="input input-sm" type="text" placeholder="e.g. 2-4, 7" autocomplete="off">
+                            <button type="button" class="btn btn-sm btn-danger-ghost" data-action="org-delete-range">Delete range</button>
+                        </div>
+                        <div class="tb-group" data-tools="extract" hidden>
+                            <button type="button" class="btn btn-sm" data-action="org-extract" data-requires="pagesel"><svg class="icon" aria-hidden="true"><use href="#i-file-up"/></svg>Extract selected</button>
+                            <label class="sr-only" for="org-range-extract">Pages to extract</label>
+                            <input id="org-range-extract" class="input input-sm" type="text" placeholder="e.g. 1-3, 5" autocomplete="off">
+                            <button type="button" class="btn btn-sm" data-action="org-extract-range">Extract range</button>
+                        </div>
+                        <div class="tb-group tb-right">
+                            <button type="button" class="btn btn-sm btn-primary" data-action="save" data-requires="doc" data-tip="Save PDF (Ctrl+S)"><svg class="icon" aria-hidden="true"><use href="#i-save"/></svg>Save PDF</button>
+                        </div>
+                    </div>
+
+                    <div id="editor-banner" class="banner" role="status" hidden>
+                        <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
+                        <div class="grow"><strong>This PDF appears to contain scanned/image content.</strong> Direct text editing is unavailable. You can use: <button type="button" class="btn btn-sm" data-action="add-text">Add Text</button></div>
+                        <button type="button" class="icon-btn" id="btn-banner-close" aria-label="Dismiss message"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button>
+                    </div>
+
+                    <div class="ws-body">
+                        <aside id="thumb-panel" class="thumb-panel" data-tools="viewer editor" aria-label="Page thumbnails"><div id="thumb-list" class="thumb-list"></div></aside>
+                        <div id="pane-scroll" class="pane-scroll" data-tools="viewer editor" tabindex="0" aria-label="Document pages">
+                            <div id="pdf-pages" class="pdf-pages"></div>
+                        </div>
+                        <div id="pane-organize" class="pane-organize" data-tools="organize rotate delete extract" hidden>
+                            <p class="org-hint muted" id="org-hint"></p>
+                            <ul id="org-grid" class="org-grid" aria-label="Pages"></ul>
+                        </div>
+                        <div id="pane-watermark" class="pane-split" data-tools="watermark" hidden>
+                            <div class="tool-page">
+                                <header class="tool-head"><h1>Watermark</h1><p class="muted" id="wm-info"></p></header>
+                                <div class="panel options-grid">
+                                    <div class="field"><label class="field-label" for="wm-text">Text</label><input id="wm-text" class="input" type="text" value="CONFIDENTIAL" maxlength="80" autocomplete="off"></div>
+                                    <div class="field"><label class="field-label" for="wm-size">Font size (pt)</label><input id="wm-size" class="input" type="number" min="8" max="300" value="64"></div>
+                                    <div class="field"><label class="field-label" for="wm-color">Colour</label><input id="wm-color" class="color-input" type="color" value="#9ca3af"></div>
+                                    <div class="field"><label class="field-label" for="wm-opacity">Opacity <output id="wm-opacity-val">25%</output></label><input id="wm-opacity" type="range" min="5" max="100" step="5" value="25"></div>
+                                    <div class="field"><label class="field-label" for="wm-angle">Direction</label>
+                                        <select id="wm-angle" class="input"><option value="-45">Diagonal ↗</option><option value="0">Horizontal</option><option value="45">Diagonal ↘</option><option value="-90">Vertical</option></select></div>
+                                    <div class="field"><label class="field-label" for="wm-layout">Layout</label>
+                                        <select id="wm-layout" class="input"><option value="single">Single, centred</option><option value="tiled">Tiled across the page</option></select></div>
+                                    <div class="field"><label class="field-label" for="wm-pages">Pages (blank = all)</label><input id="wm-pages" class="input" type="text" placeholder="e.g. 1-3, 5" autocomplete="off"></div>
+                                </div>
+                                <div class="btn-row" style="justify-content:flex-start">
+                                    <button type="button" class="btn btn-primary" data-action="wm-apply">Apply watermark</button>
+                                    <button type="button" class="btn" data-action="wm-remove">Remove watermark</button>
+                                    <button type="button" class="btn btn-success" data-action="open-tool" data-tool="viewer">Preview in Viewer</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="pane-numbers" class="pane-split" data-tools="numbers" hidden>
+                            <div class="tool-page">
+                                <header class="tool-head"><h1>Page Numbers</h1><p class="muted" id="pn-info"></p></header>
+                                <div class="panel options-grid">
+                                    <div class="field"><label class="field-label" for="pn-format">Format</label>
+                                        <select id="pn-format" class="input"><option value="{n}">1</option><option value="Page {n}">Page 1</option><option value="Page {n} of {total}">Page 1 of N</option><option value="{n} / {total}">1 / N</option><option value="- {n} -">- 1 -</option></select></div>
+                                    <div class="field"><label class="field-label" for="pn-position">Position</label>
+                                        <select id="pn-position" class="input"><option value="bottom-center">Bottom centre</option><option value="bottom-right">Bottom right</option><option value="bottom-left">Bottom left</option><option value="top-center">Top centre</option><option value="top-right">Top right</option><option value="top-left">Top left</option></select></div>
+                                    <div class="field"><label class="field-label" for="pn-start">First number</label><input id="pn-start" class="input" type="number" value="1"></div>
+                                    <div class="field"><label class="field-label" for="pn-size">Font size (pt)</label><input id="pn-size" class="input" type="number" min="6" max="72" value="11"></div>
+                                    <div class="field"><label class="field-label" for="pn-margin">Margin from edge (pt)</label><input id="pn-margin" class="input" type="number" min="0" max="200" value="30"></div>
+                                    <div class="field"><label class="field-label" for="pn-color">Colour</label><input id="pn-color" class="color-input" type="color" value="#374151"></div>
+                                    <div class="field"><label class="field-label" for="pn-pages">Pages (blank = all)</label><input id="pn-pages" class="input" type="text" placeholder="e.g. 2-10" autocomplete="off"></div>
+                                </div>
+                                <p class="muted">Numbers follow the current page order — apply them after reordering or deleting pages.</p>
+                                <div class="btn-row" style="justify-content:flex-start">
+                                    <button type="button" class="btn btn-primary" data-action="pn-apply">Add page numbers</button>
+                                    <button type="button" class="btn" data-action="pn-remove">Remove page numbers</button>
+                                    <button type="button" class="btn btn-ghost" data-action="open-tool" data-tool="viewer">Preview in Viewer</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="pane-toimg" class="pane-split" data-tools="toimg" hidden>
+                            <div class="tool-page">
+                                <header class="tool-head"><h1>PDF to Images</h1><p class="muted" id="toimg-info"></p></header>
+                                <div class="panel options-grid">
+                                    <div class="field"><label class="field-label" for="toimg-format">Format</label><select id="toimg-format" class="input"><option value="png">PNG (lossless)</option><option value="jpeg">JPG (smaller)</option></select></div>
+                                    <div class="field"><label class="field-label" for="toimg-dpi">Resolution</label><select id="toimg-dpi" class="input"><option value="72">72 dpi (screen)</option><option value="150" selected>150 dpi (good)</option><option value="300">300 dpi (print)</option></select></div>
+                                    <div class="field"><label class="field-label" for="toimg-pages">Pages (blank = all)</label><input id="toimg-pages" class="input" type="text" placeholder="e.g. 1-3, 5" autocomplete="off"></div>
+                                </div>
+                                <div class="btn-row" style="justify-content:flex-start"><button type="button" class="btn btn-primary" data-action="toimg-run">Export images</button></div>
+                                <p class="muted">Includes any edits, text, signatures, watermarks and page numbers you added. Several pages are bundled into one .zip.</p>
+                            </div>
+                        </div>
+                        <div id="pane-totext" class="pane-split" data-tools="totext" hidden>
+                            <div class="tool-page">
+                                <header class="tool-head"><h1>Extract Text</h1><p class="muted" id="totext-info"></p></header>
+                                <div class="btn-row" style="justify-content:flex-start">
+                                    <button type="button" class="btn btn-primary" data-action="totext-run">Extract text</button>
+                                    <button type="button" class="btn" data-action="totext-copy" disabled>Copy</button>
+                                    <button type="button" class="btn" data-action="totext-download" disabled>Download .txt</button>
+                                </div>
+                                <label class="sr-only" for="tt-output">Extracted text</label>
+                                <textarea id="tt-output" class="input text-output" readonly placeholder="Extracted text appears here. Scanned PDFs contain no text (there is no OCR)."></textarea>
+                            </div>
+                        </div>
+                        <div id="pane-protect" class="pane-split" data-tools="protect" hidden>
+                            <div class="tool-page">
+                                <header class="tool-head"><h1>Protect PDF</h1><p class="muted" id="pw-info"></p></header>
+                                <div class="panel options-grid">
+                                    <div class="field"><label class="field-label" for="pw-user">Open password</label><input id="pw-user" class="input" type="password" autocomplete="new-password"></div>
+                                    <div class="field"><label class="field-label" for="pw-user2">Confirm password</label><input id="pw-user2" class="input" type="password" autocomplete="new-password"></div>
+                                    <div class="field"><label class="field-label" for="pw-owner">Owner password (optional)</label><input id="pw-owner" class="input" type="password" autocomplete="new-password" placeholder="Blank = generate one"></div>
+                                </div>
+                                <label class="check"><input type="checkbox" id="pw-show"><span>Show passwords</span></label>
+                                <fieldset class="panel radio-group"><legend class="field-label">Allow people who open it to…</legend>
+                                    <label class="check"><input type="checkbox" id="pw-print" checked><span>Print</span></label>
+                                    <label class="check"><input type="checkbox" id="pw-copy" checked><span>Copy text and images</span></label>
+                                    <label class="check"><input type="checkbox" id="pw-modify" checked><span>Modify the document (edit, reorder pages)</span></label>
+                                    <label class="check"><input type="checkbox" id="pw-annotate" checked><span>Add comments and fill forms</span></label>
+                                </fieldset>
+                                <p class="muted">Uses AES-256 encryption, done in your browser (the encryption engine is downloaded the first time, about 1.3 MB). Include your edits: the downloaded copy is built from the open document. <strong>If you forget the open password the file cannot be recovered.</strong> Permissions are honoured by well-behaved viewers; the open password is what really protects the content.</p>
+                                <div class="btn-row" style="justify-content:flex-start"><button type="button" class="btn btn-primary" data-action="protect-run">Protect &amp; download</button></div>
+                            </div>
+                        </div>
+                        <div id="pane-split" class="pane-split" data-tools="split" hidden>
+                            <div class="tool-page">
+                                <header class="tool-head"><h1>Split PDF</h1><p class="muted" id="split-info"></p></header>
+                                <div class="panel stack">
+                                    <fieldset class="radio-group"><legend class="field-label">Split mode</legend>
+                                        <label class="radio"><input type="radio" name="smode" value="each" checked><span><strong>Every page</strong> into its own file</span></label>
+                                        <label class="radio"><input type="radio" name="smode" value="every"><span><strong>Every</strong> <input id="split-n" class="input input-sm input-num" type="number" min="1" value="2" aria-label="Pages per file"> <strong>pages</strong> into one file</span></label>
+                                        <label class="radio"><input type="radio" name="smode" value="ranges"><span><strong>Custom ranges</strong>, one file per range: <input id="split-ranges" class="input input-sm" type="text" placeholder="1-3, 4-6, 9" aria-label="Custom ranges" autocomplete="off"></span></label>
+                                    </fieldset>
+                                    <label class="check"><input type="checkbox" id="split-zip" checked><span>Bundle results in one .zip file</span></label>
+                                    <div class="btn-row"><button type="button" class="btn btn-primary" data-action="split-run">Split PDF</button></div>
+                                </div>
+                                <section class="split-preview" aria-labelledby="split-preview-title">
+                                    <h2 id="split-preview-title">All pages</h2>
+                                    <p class="muted" id="split-summary" aria-live="polite"></p>
+                                    <ul id="split-grid" class="split-grid" aria-label="Pages and the file each one goes into"></ul>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- floating text toolbar (positioned by pdf-text-editor.js) -->
+                    <div id="float-toolbar" class="float-toolbar" role="toolbar" aria-label="Text formatting" hidden>
+                        <div class="ft-group" data-for="text">
+                            <label class="sr-only" for="ft-font">Font</label>
+                            <select id="ft-font" class="input input-sm"></select>
+                            <label class="sr-only" for="ft-size">Font size</label>
+                            <input id="ft-size" class="input input-sm input-num" type="number" min="4" max="300" step="1" list="ft-sizes">
+                            <datalist id="ft-sizes"></datalist>
+                        </div>
+                        <div class="ft-group" data-for="text">
+                            <button type="button" class="icon-btn" id="ft-bold" aria-pressed="false" data-tip="Bold" aria-label="Bold"><svg class="icon" aria-hidden="true"><use href="#i-bold"/></svg></button>
+                            <button type="button" class="icon-btn" id="ft-italic" aria-pressed="false" data-tip="Italic" aria-label="Italic"><svg class="icon" aria-hidden="true"><use href="#i-italic"/></svg></button>
+                            <button type="button" class="icon-btn" id="ft-underline" aria-pressed="false" data-tip="Underline" aria-label="Underline"><svg class="icon" aria-hidden="true"><use href="#i-underline"/></svg></button>
+                        </div>
+                        <div class="ft-group" data-for="fill">
+                            <label class="sr-only" for="ft-color">Color</label>
+                            <input id="ft-color" class="color-input" type="color" value="#000000" data-tip="Color">
+                        </div>
+                        <div class="ft-group" data-for="text">
+                            <button type="button" class="icon-btn" data-align="left" aria-pressed="true" data-tip="Align left" aria-label="Align left"><svg class="icon" aria-hidden="true"><use href="#i-align-left"/></svg></button>
+                            <button type="button" class="icon-btn" data-align="center" aria-pressed="false" data-tip="Align center" aria-label="Align center"><svg class="icon" aria-hidden="true"><use href="#i-align-center"/></svg></button>
+                            <button type="button" class="icon-btn" data-align="right" aria-pressed="false" data-tip="Align right" aria-label="Align right"><svg class="icon" aria-hidden="true"><use href="#i-align-right"/></svg></button>
+                        </div>
+                        <div class="ft-group">
+                            <label class="ft-opacity" for="ft-opacity">Opacity <input id="ft-opacity" type="range" min="10" max="100" step="5" value="100"><output id="ft-opacity-val">100%</output></label>
+                        </div>
+                        <div class="ft-group">
+                            <button type="button" class="icon-btn" id="ft-delete" data-tip="Delete" aria-label="Delete"><svg class="icon" aria-hidden="true"><use href="#i-trash"/></svg></button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- ======================= STATUS BAR ======================= -->
+    <footer class="statusbar" aria-label="Status">
+        <div class="sb-group sb-pages" data-requires-group="viewer">
+            <button type="button" class="icon-btn" data-action="page-prev" data-requires="scroll" data-tip="Previous page" aria-label="Previous page"><svg class="icon" aria-hidden="true"><use href="#i-chev-left"/></svg></button>
+            <span class="sb-page">Page <input id="page-input" class="input input-sm input-num" type="number" min="1" value="1" aria-label="Current page number" disabled> / <span id="page-total">0</span></span>
+            <button type="button" class="icon-btn" data-action="page-next" data-requires="scroll" data-tip="Next page" aria-label="Next page"><svg class="icon" aria-hidden="true"><use href="#i-chev-right"/></svg></button>
+        </div>
+        <div class="sb-group sb-zoom">
+            <button type="button" class="icon-btn" data-action="zoom-out" data-requires="scroll" data-tip="Zoom out (Ctrl+-)" aria-label="Zoom out"><svg class="icon" aria-hidden="true"><use href="#i-zoom-out"/></svg></button>
+            <button type="button" class="zoom-label" id="zoom-label" data-action="zoom-reset" data-requires="scroll" data-tip="Reset zoom (Ctrl+0)" aria-label="Reset zoom">100%</button>
+            <button type="button" class="icon-btn" data-action="zoom-in" data-requires="scroll" data-tip="Zoom in (Ctrl++)" aria-label="Zoom in"><svg class="icon" aria-hidden="true"><use href="#i-zoom-in"/></svg></button>
+            <button type="button" class="icon-btn" data-action="fit-width" data-requires="scroll" data-tip="Fit width" aria-label="Fit width"><svg class="icon" aria-hidden="true"><use href="#i-fit-width"/></svg></button>
+            <button type="button" class="icon-btn" data-action="fit-page" data-requires="scroll" data-tip="Fit page" aria-label="Fit page"><svg class="icon" aria-hidden="true"><use href="#i-fit-page"/></svg></button>
+        </div>
+        <div class="sb-status" id="status-msg" role="status" aria-live="polite">Ready</div>
+        <div class="sb-group">
+            <button type="button" class="btn btn-sm" data-action="download" data-requires="doc" data-tip="Download PDF"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg><span>Download</span></button>
+        </div>
+    </footer>
+</div>
+
+<!-- ======================= OVERLAYS ======================= -->
+<div id="progress-overlay" class="progress-overlay" role="alertdialog" aria-modal="true" aria-labelledby="progress-title" hidden>
+    <div class="progress-card">
+        <h2 id="progress-title">Processing PDF…</h2>
+        <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-labelledby="progress-title" id="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+        <p class="muted" id="progress-text">Please wait.</p>
+    </div>
+</div>
+<div id="modal-root"></div>
+<div id="toast-root" class="toast-root" aria-live="polite"></div>
+<div id="tooltip" class="tooltip" role="tooltip" hidden></div>
+
+<!-- Application scripts (classic scripts so the app also works from file://). Order matters. -->
+<script src="config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/toast.js"></script>
+<script src="js/modal.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/file-manager.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/pdf-history.js"></script>
+<script src="js/pdf-viewer.js"></script>
+<script src="js/pdf-tools.js"></script>
+<script src="js/pdf-security.js"></script>
+<script src="js/pdf-pages.js"></script>
+<script src="js/pdf-merge.js"></script>
+<script src="js/pdf-compress.js"></script>
+<script src="js/image-to-pdf.js"></script>
+<script src="js/pdf-text-editor.js"></script>
+<script src="js/pdf-stamp.js"></script>
+<script src="js/pdf-export-tools.js"></script>
+<script src="js/pdf-editor.js"></script>
+<script src="js/tour.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
