@@ -2,7 +2,7 @@
 
 # Online PDF Editor
 
-### 🚀 Live demo → [prabhat-kumar-tech.github.io/online_pdf_editor](https://prabhat-kumar-tech.github.io/online_pdf_editor/)
+<a href="https://prabhat-kumar-tech.github.io/online_pdf_editor/"><img src="docs/live-demo.svg" alt="🚀 Live demo →" width="340"></a>
 
 **Edit, merge, split, protect and convert PDFs — entirely in your browser.**
 Your files never leave your device. No uploads, no sign-up, no build step, no page limit.
